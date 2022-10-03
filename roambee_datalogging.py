@@ -6,7 +6,7 @@ import time
 
 
 
-serial_port = '/dev/cu.usbmodem1201'
+serial_port = '/dev/cu.usbmodem11201'
 serial_baud = 115200
 log_dir = "log-data/"
 
@@ -36,7 +36,10 @@ ser = serial.Serial( serial_port, serial_baud , timeout = 10)
 loop = 1; #loop until you hit something 
 while loop:
     try:
-        x=ser.readline()
+        if(ser == None):
+            ser = serial.Serial( serial_port, serial_baud , timeout = 10)
+        else:
+            x=ser.readline()
         #filter the string here and store to the filter file
         print('{:%Y-%m-%d %H:%M:%S}'.format(datetime.datetime.now()))
         print(x)
@@ -50,6 +53,7 @@ while loop:
         print("**** Device disconnected or some error *****")
         fid.write(bytes(datetime.datetime.now().strftime("%y-%m-%d %H:%M:%S")+": "+"DeviceDisconnted or some error - ",'ascii'))
         print(e)
-        loop=0;
-        ser.close()
-        quit()
+        #loop=0;
+        #ser.close()
+        ser = None
+        #quit()
